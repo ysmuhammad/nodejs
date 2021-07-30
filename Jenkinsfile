@@ -52,6 +52,7 @@ def automateTest(String buildName, String wlpName) {
                         export tagName=$(git tag --sort=committerdate | tail -1)
                         echo "tagName: ${tagName}"
                     '''
+                    echo "tagName groovy: ${env.tagName}"
                     checkout(
                         [
                             $class: 'GitSCM',

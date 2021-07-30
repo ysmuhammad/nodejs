@@ -49,7 +49,7 @@ def automateTest(String buildName, String wlpName) {
                         credentialsId: 'yusuftravlr-github',
                         url: 'https://github.com/ysmuhammad/nodejs'
                     def tagName = sh(script: '''#!/usr/bin/env bash
-                        git tag --sort=committerdate | tail -1)
+                        git tag --sort=committerdate | tail -1
                         ''',
                         returnStdout: true)
                     echo "tagName groovy: ${env.tagName}"

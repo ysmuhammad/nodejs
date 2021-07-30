@@ -50,6 +50,7 @@ def automateTest(String buildName, String wlpName) {
                         url: 'https://github.com/ysmuhammad/nodejs'
                     sh '''#!/usr/bin/env bash
                         export tagName=$(git tag --sort=committerdate | tail -1)
+                        echo "tagName: ${tagName}"
                     '''
                     checkout(
                         [

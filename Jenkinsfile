@@ -1,44 +1,42 @@
 #!/usr/bin/env groovy
-def call() {
-    withCredentials([string(credentialsId: 'cypressProjectId', variable: 'cypressProjectId'),string(credentialsId: 'cypressRecordKey', variable: 'cypressRecordKey'),string(credentialsId: 'PERCY_TOKEN', variable: 'PERCY_TOKEN')]){
-        String key = cypressParam.substring(cypressParam.indexOf("--tags=") + 7, cypressParam.indexOf("--wlp")).replace("'","")
-        if (!(cypressParam.contains("--parallel-group"))) {
-            wlp = cypressParam.substring(cypressParam.indexOf("--wlp=") + 6, cypressParam.length())
-        } else {
-            wlp = cypressParam.substring(cypressParam.indexOf("--wlp=") + 6, cypressParam.indexOf("--parallel-group"))
-            group = cypressParam.substring(cypressParam.indexOf("--parallel-group=") + 17, cypressParam.length())
-            parallelGroup = []
-            parallelGroup = group.split(",")
-        }
+withCredentials([string(credentialsId: 'cypressProjectId', variable: 'cypressProjectId'),string(credentialsId: 'cypressRecordKey', variable: 'cypressRecordKey'),string(credentialsId: 'PERCY_TOKEN', variable: 'PERCY_TOKEN')]){
+    String key = cypressParam.substring(cypressParam.indexOf("--tags=") + 7, cypressParam.indexOf("--wlp")).replace("'","")
+    if (!(cypressParam.contains("--parallel-group"))) {
+        wlp = cypressParam.substring(cypressParam.indexOf("--wlp=") + 6, cypressParam.length())
+    } else {
+        wlp = cypressParam.substring(cypressParam.indexOf("--wlp=") + 6, cypressParam.indexOf("--parallel-group"))
+        group = cypressParam.substring(cypressParam.indexOf("--parallel-group=") + 17, cypressParam.length())
+        parallelGroup = []
+        parallelGroup = group.split(",")
+    }
 
-        String finalTag;
-        String finalCommand;
+    String finalTag;
+    String finalCommand;
 
-        if ((cypressParam.contains("--parallel-group"))) {
-            String[] segments = key.split(" ");
-            
-            def tagList = [];
-            segments.each {
-                if ((it.contains("@"))) {
-                tagList << it
-                }
+    if ((cypressParam.contains("--parallel-group"))) {
+        String[] segments = key.split(" ");
+        
+        def tagList = [];
+        segments.each {
+            if ((it.contains("@"))) {
+            tagList << it
             }
-            for (int i = 0; i < tagList.size(); i++) {
-                finalCommand = "auto:server --tags='" + tagList[i] + "' --wlp=${wlp} --parallel-group=${parallelGroup[i]}"
-                if ((tagList[i].contains("login"))) {
-                    automateTest("${finalCommand}","${wlp}")
-                } else {
-                    def parallelStages = [:]
-                    for (int z = 0; z < 3; z++) {
-                        def parallelName = "Test ${wlp} - ${tagList[i]} - " + z
-                        parallelStages.put(parallelName, prepareBuildStage("${finalCommand}","${wlp}"))
-                    }
-                    parallel(parallelStages)
-                }
-            }
-        } else {
-            automateTest("${cypressParam}","${wlp}")
         }
+        for (int i = 0; i < tagList.size(); i++) {
+            finalCommand = "auto:server --tags='" + tagList[i] + "' --wlp=${wlp} --parallel-group=${parallelGroup[i]}"
+            if ((tagList[i].contains("login"))) {
+                automateTest("${finalCommand}","${wlp}")
+            } else {
+                def parallelStages = [:]
+                for (int z = 0; z < 3; z++) {
+                    def parallelName = "Test ${wlp} - ${tagList[i]} - " + z
+                    parallelStages.put(parallelName, prepareBuildStage("${finalCommand}","${wlp}"))
+                }
+                parallel(parallelStages)
+            }
+        }
+    } else {
+        automateTest("${cypressParam}","${wlp}")
     }
 }
 

@@ -48,10 +48,10 @@ def automateTest(String buildName, String wlpName) {
                     git branch: "master",
                         credentialsId: 'yusuftravlr-github',
                         url: 'https://github.com/ysmuhammad/nodejs'
-                    sh '''#!/usr/bin/env bash
-                        export tagName=$(git tag --sort=committerdate | tail -1)
-                        echo "tagName: ${tagName}"
-                    '''
+                    def tagName = sh(script: '''#!/usr/bin/env bash
+                        git tag --sort=committerdate | tail -1)
+                        ''',
+                        returnStdout: true)
                     echo "tagName groovy: ${env.tagName}"
                     checkout(
                         [

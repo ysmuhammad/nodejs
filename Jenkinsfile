@@ -1,4 +1,3 @@
-#!/usr/bin/env groovy
 
 withCredentials([string(credentialsId: 'cypressProjectId', variable: 'cypressProjectId'),string(credentialsId: 'cypressRecordKey', variable: 'cypressRecordKey'),string(credentialsId: 'PERCY_TOKEN', variable: 'PERCY_TOKEN')]){
     String key = cypressParam.substring(cypressParam.indexOf("--tags=") + 7, cypressParam.indexOf("--wlp")).replace("'","")

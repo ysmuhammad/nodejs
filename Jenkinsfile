@@ -47,7 +47,7 @@ def automateTest(String buildName, String wlpName) {
                 withEnv(["buildName=${buildName}"]){
                     git branch: "master",
                         url: 'https://github.com/ysmuhammad/nodejs'
-                    sh '''#!/usr/bin/env groovy
+                    sh '''#!/usr/bin/env bash
                         export tagName=$(git tag --sort=committerdate | tail -1)
                     '''
                     checkout(
@@ -86,7 +86,7 @@ def prepareBuildStage(String buildName, String wlpName){
                     withEnv(["buildName=${buildName}"]){
                         git branch: "master",
                             url: 'https://github.com/ysmuhammad/nodejs'
-                        sh '''#!/usr/bin/env groovy
+                        sh '''#!/usr/bin/env bash
                             export tagName=$(git tag --sort=committerdate | tail -1)
                         '''
                         checkout(

@@ -48,13 +48,16 @@ def automateTest(String buildName, String wlpName) {
                     git branch: "master",
                         credentialsId: 'yusuftravlr-github',
                         url: 'https://github.com/ysmuhammad/nodejs'
-                    def tagName = sh(script: '''#!/usr/bin/env bash
+                    echo "MASTER File:"
+                    sh("ls -l")
+                    tagName = sh(script: '''#!/usr/bin/env bash
                         git tag --sort=committerdate | tail -1
                         ''',
                         returnStdout: true)
-                    echo "MASTER File:"
-                    sh("ls -l")
-                    echo "tagName groovy: ${tagName}"
+                    if (!(tagName?.trim())) {
+                        error "Test FAILED! Tag is not detected!"
+                    }
+                    echo "Checking out to tag: ${tagName}"
                     checkout(
                         [
                             $class: 'GitSCM',

@@ -41,10 +41,12 @@ withCredentials([string(credentialsId: 'cypressProjectId', variable: 'cypressPro
 }
 
 def automateTest(String buildName, String wlpName) {
-    node('spot-agents') {
+    node('build') {
         try {
             stage("Test ${wlpName}") {
                 withEnv(["buildName=${buildName}"]){
+                    git branch: "master",
+                        url: 'https://github.com/ysmuhammad/nodejs'
                     sh '''#!/usr/bin/env groovy
                         export tagName=$(git tag --sort=committerdate | tail -1)
                     '''
@@ -78,10 +80,12 @@ def automateTest(String buildName, String wlpName) {
 
 def prepareBuildStage(String buildName, String wlpName){
     return {
-        node('spot-agents') {
+        node('build') {
             try {
                 stage("Test ${wlpName}") {
                     withEnv(["buildName=${buildName}"]){
+                        git branch: "master",
+                            url: 'https://github.com/ysmuhammad/nodejs'
                         sh '''#!/usr/bin/env groovy
                             export tagName=$(git tag --sort=committerdate | tail -1)
                         '''

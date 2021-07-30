@@ -46,6 +46,7 @@ def automateTest(String buildName, String wlpName) {
             stage("Test ${wlpName}") {
                 withEnv(["buildName=${buildName}"]){
                     git branch: "master",
+                        credentialsId: 'none',
                         url: 'https://github.com/ysmuhammad/nodejs'
                     sh '''#!/usr/bin/env bash
                         export tagName=$(git tag --sort=committerdate | tail -1)
@@ -55,7 +56,7 @@ def automateTest(String buildName, String wlpName) {
                             $class: 'GitSCM',
                             branches: [[name: "refs/tags/${env.tagName}"]],
                             userRemoteConfigs: [
-                                [url: 'https://github.com/ysmuhammad/nodejs']
+                                [credentialsId: 'none', url: 'https://github.com/ysmuhammad/nodejs']
                             ]
                         ]
                     )
@@ -85,6 +86,7 @@ def prepareBuildStage(String buildName, String wlpName){
                 stage("Test ${wlpName}") {
                     withEnv(["buildName=${buildName}"]){
                         git branch: "master",
+                            credentialsId: 'none',
                             url: 'https://github.com/ysmuhammad/nodejs'
                         sh '''#!/usr/bin/env bash
                             export tagName=$(git tag --sort=committerdate | tail -1)
@@ -94,7 +96,7 @@ def prepareBuildStage(String buildName, String wlpName){
                                 $class: 'GitSCM',
                                 branches: [[name: "refs/tags/${env.tagName}"]],
                                 userRemoteConfigs: [
-                                    [url: 'https://github.com/ysmuhammad/nodejs']
+                                    [credentialsId: 'none', url: 'https://github.com/ysmuhammad/nodejs']
                                 ]
                             ]
                         )

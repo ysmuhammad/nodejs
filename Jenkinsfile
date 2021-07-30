@@ -26,18 +26,18 @@ def call() {
             for (int i = 0; i < tagList.size(); i++) {
                 finalCommand = "auto:server --tags='" + tagList[i] + "' --wlp=${wlp} --parallel-group=${parallelGroup[i]}"
                 if ((tagList[i].contains("login"))) {
-                    util.automateTest("${finalCommand}","${wlp}")
+                    automateTest("${finalCommand}","${wlp}")
                 } else {
                     def parallelStages = [:]
                     for (int z = 0; z < 3; z++) {
                         def parallelName = "Test ${wlp} - ${tagList[i]} - " + z
-                        parallelStages.put(parallelName, util.prepareBuildStage("${finalCommand}","${wlp}"))
+                        parallelStages.put(parallelName, prepareBuildStage("${finalCommand}","${wlp}"))
                     }
                     parallel(parallelStages)
                 }
             }
         } else {
-            util.automateTest("${cypressParam}","${wlp}")
+            automateTest("${cypressParam}","${wlp}")
         }
     }
 }

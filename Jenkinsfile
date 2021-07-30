@@ -52,6 +52,8 @@ def automateTest(String buildName, String wlpName) {
                         git tag --sort=committerdate | tail -1
                         ''',
                         returnStdout: true)
+                    echo "MASTER File:"
+                    sh("ls -l")
                     echo "tagName groovy: ${tagName}"
                     checkout(
                         [
@@ -65,7 +67,7 @@ def automateTest(String buildName, String wlpName) {
                     AUTOMATE_TEST = sh (
                     script: '''#!/usr/bin/env bash
                             set -x
-                            echo "Running Test $buildName ..."
+                            echo "TAG File:"
                             ls -l
                             ''',
                     returnStatus: true

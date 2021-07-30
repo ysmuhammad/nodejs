@@ -52,11 +52,11 @@ def automateTest(String buildName, String wlpName) {
                         git tag --sort=committerdate | tail -1
                         ''',
                         returnStdout: true)
-                    echo "tagName groovy: ${env.tagName}"
+                    echo "tagName groovy: ${tagName}"
                     checkout(
                         [
                             $class: 'GitSCM',
-                            branches: [[name: "refs/tags/${env.tagName}"]],
+                            branches: [[name: "refs/tags/${tagName}"]],
                             userRemoteConfigs: [
                                 [credentialsId: 'yusuftravlr-github', url: 'https://github.com/ysmuhammad/nodejs']
                             ]
